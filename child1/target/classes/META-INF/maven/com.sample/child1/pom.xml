@@ -1,9 +1,62 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.sample</groupId>
-    <artifactId>test-parent</artifactId>
-    <version>${revision}</version>
-  </parent>
-  <artifactId>child1</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sample</groupId>
+		<artifactId>test-parent</artifactId>
+		<version>${revision}</version>
+	</parent>
+	<artifactId>child1</artifactId>
+	
+	<dependencies>
+		<dependency>
+			 <groupId>com.ext</groupId>
+  			<artifactId>external-common</artifactId>
+			<version>${common.version}</version>			
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+							</transformers>
+							<relocations>
+								<relocation>
+									<pattern>org.apache.commons.cli</pattern>
+									<shadedPattern>shaded.org.apache.commons.cli</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>com.fasterxml.jackson.core</pattern>
+									<shadedPattern>shaded.com.fasterxml.jackson.core</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>com.fasterxml.jackson.databind</pattern>
+									<shadedPattern>shaded.com.fasterxml.jackson.databind</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>com.fasterxml.jackson.annotation</pattern>
+									<shadedPattern>shaded.com.fasterxml.jackson.annotation</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
 </project>
